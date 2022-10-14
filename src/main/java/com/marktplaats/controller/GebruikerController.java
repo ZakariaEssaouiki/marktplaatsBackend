@@ -40,6 +40,4 @@ public class GebruikerController {
             return "Gebruiker is niet verwijderd";
         }
     }
-
-    //@UpdateMapping("/Update")
 }
