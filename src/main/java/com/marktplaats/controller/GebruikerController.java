@@ -41,15 +41,4 @@ public class GebruikerController {
         }
     }
 
-    @DeleteMapping("/Delete")
-    public String DeleteTest(@RequestBody Gebruiker gebruiker){
-        if(gebruiker.getId() > 0){
-            gebruikerService.deleteGebruikerById(gebruiker.getId());
-            return "Gebruiker is succevol verwijderd";
-        }
-        else{
-            return "Gebruiker is niet verwijderd";
-        }
-    }
-
 }
