@@ -12,8 +12,6 @@ public class Gebruiker {
     private String email;
     private String gebruikersnaam;
 
-    public Gebruiker(){}
-
     public void setId(int id){
         this.id = id;
     }
