@@ -11,6 +11,7 @@ public class Gebruiker {
     private int id;
     private String email;
     private String gebruikersnaam;
+    private int leeftijd;
 
     public void setId(int id){
         this.id = id;
@@ -21,7 +22,7 @@ public class Gebruiker {
     public void setGebruikersnaam(String gebruikersnaam){
         this.gebruikersnaam = gebruikersnaam;
     }
-
+    public void setLeeftijd(int leeftijd){this.leeftijd = leeftijd;}
     public int getId() {
         return this.id;
     }
@@ -30,5 +31,10 @@ public class Gebruiker {
     }
     public String getEmail(){
         return this.email;
+    }
+    public int getLeeftijd(){return this.leeftijd;}
+
+    public boolean IsVolwassen(){
+        return this.leeftijd >= 18;
     }
 }
