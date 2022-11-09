@@ -108,7 +108,8 @@
 				<version>2.22.2</version>
 				<configuration>
 					<argLine>
-						--illegal-access=permit
+						
+						--add-opens java.base/java.util=ALL-UNNAMED
 					</argLine>
 					<testFailureIgnore>true</testFailureIgnore>
 					<forkCount>2</forkCount>
