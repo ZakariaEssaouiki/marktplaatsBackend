@@ -1,40 +1,75 @@
 package com.marktplaats.model;
-import javax.persistence.Entity;
-import javax.persistence.GenerationType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Entity
+@Table(name = "Gebruikers")
 public class Gebruiker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String email;
+    @Column(unique = true)
     private String gebruikersnaam;
-    private int leeftijd;
+    @Column(unique = true)
+    private String email;
+    private String wachtwoord;
+    private String voornaam;
+    private String achternaam;
+    private LocalDate geboorteDatum;
+    @Enumerated(EnumType.STRING)
+    private Geslacht geslacht;
 
-    public void setId(int id){
+    public Gebruiker(String gebruikersnaam, String email, String wachtwoord, String voornaam,String achternaam,
+                     LocalDate geboorteDatum, Geslacht geslacht,int id) {
+        this.gebruikersnaam = gebruikersnaam;
+        this.email = email;
+        this.wachtwoord = wachtwoord;
+        this.voornaam = voornaam;
+        this.achternaam = achternaam;
+        this.geboorteDatum = geboorteDatum;
+        this.geslacht = geslacht;
         this.id = id;
     }
-    public void setEmail(String email){
-        this.email = email;
-    }
-    public void setGebruikersnaam(String gebruikersnaam){
-        this.gebruikersnaam = gebruikersnaam;
-    }
-    public void setLeeftijd(int leeftijd){this.leeftijd = leeftijd;}
-    public int getId() {
-        return this.id;
-    }
-    public String getGebruikersnaam(){
-        return this.gebruikersnaam;
-    }
-    public String getEmail(){
-        return this.email;
-    }
-    public int getLeeftijd(){return this.leeftijd;}
 
-    public boolean IsVolwassen(){
-        return this.leeftijd >= 18;
+    public Gebruiker(Optional<Gebruiker> gebruiker){
+        if(gebruiker.isPresent()){
+            this.gebruikersnaam = gebruiker.get().getGebruikersnaam();
+            this.email = gebruiker.get().getEmail();
+            this.wachtwoord = gebruiker.get().getWachtwoord();
+            this.voornaam = gebruiker.get().getVoornaam();
+            this.achternaam = gebruiker.get().getAchternaam();
+            this.geboorteDatum = gebruiker.get().getGeboorteDatum();
+            this.geslacht = gebruiker.get().getGeslacht();
+            this.id = gebruiker.get().getId();
+        }
+    }
+    public Gebruiker(){}
+
+    public int getLeeftijd(){
+        return (int)ChronoUnit.YEARS.between(this.geboorteDatum, LocalDate.now());
+    }
+
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+    public String getGebruikersnaam() {return gebruikersnaam;}
+    public void setGebruikersnaam(String gebruikersnaam) {this.gebruikersnaam = gebruikersnaam;}
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
+    public String getWachtwoord() {return wachtwoord;}
+    public void setWachtwoord(String wachtwoord) {this.wachtwoord = wachtwoord;}
+    public LocalDate getGeboorteDatum() {return geboorteDatum;}
+    public void setGeboorteDatum(LocalDate geboorteDatum) {this.geboorteDatum = geboorteDatum;}
+    public Geslacht getGeslacht() {return geslacht;}
+    public void setGeslacht(Geslacht geslacht) {this.geslacht = geslacht;}
+    public String getVoornaam() {return voornaam;}
+    public void setVoornaam(String voornaam) {this.voornaam = voornaam;}
+    public String getAchternaam() {return achternaam;}
+    public void setAchternaam(String achternaam) {this.achternaam = achternaam;}
+    @Override
+    public String toString() {
+        return this.gebruikersnaam;
     }
 }

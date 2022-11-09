@@ -1,8 +1,10 @@
 package com.marktplaats.controller;
 
-import com.marktplaats.model.Gebruiker;
+import com.marktplaats.model.Product;
 import com.marktplaats.service.GebruikerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,31 +16,16 @@ public class GebruikerController {
     @Autowired
     private GebruikerService gebruikerService;
 
-    @PostMapping("/add")
-    public String add(@RequestBody Gebruiker gebruiker){
-        if(!gebruiker.getEmail().equals("") && !gebruiker.getGebruikersnaam().equals("")){
-            gebruikerService.saveGebruiker(gebruiker);
-            return "Gebruiker is succesvol toegevoegd";
-        }
-        else{
-            return "Voer een email en gebruikersnaam in";
-        }
+    public GebruikerController(GebruikerService gebruikerService){
+        this.gebruikerService = gebruikerService;
     }
 
-    @GetMapping("/GetAll")
-    public List<Gebruiker> GetAll(){
-        return gebruikerService.GetAll();
+    @GetMapping("/producten")
+    public ResponseEntity<Object> GetAllProducten(int id){
+        List<Product> producten = gebruikerService.GetAllProducten(id);
+        return new ResponseEntity<>(producten, HttpStatus.OK);
     }
 
-    @DeleteMapping("/Delete")
-    public String Delete(@RequestBody Gebruiker gebruiker){
-        if(gebruiker.getId() > 0){
-            gebruikerService.deleteGebruikerById(gebruiker.getId());
-            return "Gebruiker is succevol verwijderd";
-        }
-        else{
-            return "Gebruiker is niet verwijderd";
-        }
-    }
+    //getAll method implementeren.
 
 }
