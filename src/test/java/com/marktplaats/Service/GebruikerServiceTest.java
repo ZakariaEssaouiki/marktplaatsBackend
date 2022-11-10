@@ -115,8 +115,8 @@ class GebruikerServiceTest {
         //when
         gebruikerService.Login("ludo101","Welkom101");
         //then
-        verify(repo).findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord("ludo101","Welkom101");
-        verify(repo,never()).findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(" "," ");
+        verify(repo).findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord("ludo101","Welkom101","ludo101","Welkom101");
+        verify(repo,never()).findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(" "," ","","");
     }
 
     @Test

@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface GebruikerRepository extends JpaRepository<Gebruiker, Integer> {
     boolean findGebruikerByEmail(String email);
     boolean findGebruikerByGebruikersnaam(String gebruikersnaam);
-    Optional<Gebruiker> findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(String gebrOfEmail, String wachtwoord);
+    Optional<Gebruiker> findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(String gebruikersnaam, String wachtwoord, String email, String wachtwoord2);
 
 }

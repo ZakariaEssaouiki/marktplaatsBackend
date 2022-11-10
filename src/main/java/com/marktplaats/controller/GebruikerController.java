@@ -25,8 +25,8 @@ public class GebruikerController {
         this.gebruikerService = gebruikerService;
     }
 
-    @GetMapping("/producten")
-    public ResponseEntity<Object> GetAllProducten(int id){
+    @GetMapping("/producten/{id}")
+    public ResponseEntity<Object> GetAllProducten(@PathVariable("id") int id){
         List<Product> producten = gebruikerService.GetAllProducten(id);
         return new ResponseEntity<>(producten, HttpStatus.OK);
     }
@@ -38,7 +38,7 @@ public class GebruikerController {
     }
 
     @PutMapping("/voegProductToe")
-    public ResponseEntity<Object> VoegProductToe(Gebruiker gebruiker, Product product){
+    public ResponseEntity<Object> VoegProductToe(@RequestBody Gebruiker gebruiker, @RequestBody Product product){
         if(Objects.nonNull(gebruiker) && Objects.nonNull(product)){
             this.gebruikerService.VoegProductToe(gebruiker,product);
             return new ResponseEntity<>(gson.toJson("Product is succesvol toegevoegd."),HttpStatus.CREATED);
@@ -46,8 +46,8 @@ public class GebruikerController {
         return new ResponseEntity<>(gson.toJson("Er is een fout ontstaan met het toevoeven van de product."),HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/deleteProduct")
-    public ResponseEntity<Object> VerwijderProduct(int id,Product product){
+    @DeleteMapping("/deleteProduct/{id}")
+    public ResponseEntity<Object> VerwijderProduct(@PathVariable("id") int id, @RequestBody Product product){
         if(Objects.nonNull(product) && Objects.nonNull(gebruikerService.FindById(id))) {
             this.gebruikerService.VerwijderProduct(id, product);
             return new ResponseEntity<>(gson.toJson("Product is succesvol verwijderd."), HttpStatus.OK);

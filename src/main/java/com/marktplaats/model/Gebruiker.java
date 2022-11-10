@@ -16,9 +16,13 @@ public class Gebruiker {
     @Column(unique = true)
     private String email;
     private String wachtwoord;
+    @Column(name = "voornaam")
     private String voornaam;
+    @Column(name = "achternaam")
     private String achternaam;
+    @Column(name = "geboorteDatum")
     private LocalDate geboorteDatum;
+    @Column(name = "geslacht")
     @Enumerated(EnumType.STRING)
     private Geslacht geslacht;
 

@@ -4,51 +4,74 @@ import com.marktplaats.model.Gebruiker;
 import com.marktplaats.model.Geslacht;
 import com.marktplaats.model.Product;
 import com.marktplaats.service.GebruikerService;
-import com.marktplaats.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@RunWith(SpringRunner.class)
+@WebMvcTest(GebruikerService.class)
 class GebruikerControllerTest {
 
+    @Autowired
+    private MockMvc mvc;
     @MockBean
     private GebruikerService gebruikerService;
-    @MockBean
-    private ProductService productService;
     private GebruikerController controller;
 
     @BeforeEach
     void setUp(){
         this.gebruikerService = Mockito.mock(GebruikerService.class);
-        this.productService = Mockito.mock(ProductService.class);
         this.controller = new GebruikerController(gebruikerService);
     }
 
     @Test
-    void getAllProducten() {
+    void getAllProducten() throws Exception {
         //given
         Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
                 LocalDate.now(), Geslacht.Man,100);
         //when
+        //this.gebruikerService.Create(gebruiker);
         this.controller.GetAllProducten(gebruiker.getId());
         //then
         verify(gebruikerService).GetAllProducten(gebruiker.getId());
+        /*mvc.perform(MockMvcRequestBuilders.get("/producten/{id}",1)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1));*/
     }
 
     @Test
-    void getAll() {
+    void getAll() throws Exception {
         //when
         this.controller.GetAll();
         //then
         verify(gebruikerService).GetAll();
+        /*mvc.perform(MockMvcRequestBuilders.get("/getAll")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gebruikers[*].id").isNotEmpty());*/
     }
 
     @Test

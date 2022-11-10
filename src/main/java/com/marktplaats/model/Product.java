@@ -10,7 +10,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String naam;
     private double prijs;
     private LocalDate datumGeplaatst;

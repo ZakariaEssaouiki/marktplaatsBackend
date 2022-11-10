@@ -66,7 +66,7 @@ public class GebruikerService implements IGebruikerService{
 
     @Override
     public Optional<Gebruiker> Login(String gebrOfEmail, String wachtwoord) {
-        Optional<Gebruiker> gebruiker = repo.findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(gebrOfEmail, wachtwoord);
+        Optional<Gebruiker> gebruiker = repo.findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(gebrOfEmail, wachtwoord,gebrOfEmail,wachtwoord);
         return gebruiker;
     }
 
