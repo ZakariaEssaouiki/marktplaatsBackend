@@ -16,6 +16,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.never;
@@ -38,10 +40,10 @@ class GebruikerServiceTest {
     @Test
     void findById() {
         //when
-        gebruikerService.FindById(1);
+        gebruikerService.FindById(100);
         //then
-        verify(repo).findById(1);
-        verify(repo, Mockito.never()).deleteById(1);
+        verify(repo).findById(100);
+        verify(repo, Mockito.never()).deleteById(100);
     }
 
     @Test
@@ -124,7 +126,7 @@ class GebruikerServiceTest {
         //when
         gebruikerService.GetAllProducten(10);
         //then
-        verify(gebruikerProductenRepo).findGebruikerProductenByGebruiker_Id(10);
+        verify(gebruikerProductenRepo).findAllByGebruiker_Id(10);
     }
 
     @Test
@@ -133,11 +135,10 @@ class GebruikerServiceTest {
         Product product = new Product("rode fiets",10,"Fiets is nog in goede staat", LocalDate.now(),100);
         Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
                 LocalDate.now(), Geslacht.Man,100);
-        //gebruikerService.Create(gebruiker);
-        gebruikerService.VoegProductToe(gebruiker, product);
         GebruikerProducten gebruikerProducten = new GebruikerProducten();
         gebruikerProducten.setProduct(product);
         gebruikerProducten.setGebruiker(gebruiker);
+        gebruikerService.VoegProductToe(gebruikerProducten);
         //then
         ArgumentCaptor<GebruikerProducten> argumentCaptor =
                 ArgumentCaptor.forClass(GebruikerProducten.class);

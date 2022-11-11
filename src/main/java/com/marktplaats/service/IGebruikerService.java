@@ -1,6 +1,7 @@
 package com.marktplaats.service;
 
 import com.marktplaats.model.Gebruiker;
+import com.marktplaats.model.GebruikerProducten;
 import com.marktplaats.model.Product;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface IGebruikerService {
     public boolean EmailAlInGebruik(String email);
     public List<Gebruiker> GetAll();
     public Optional<Gebruiker> Login(String gebrOfEmail, String wachtwoord);
-    public List<Product> GetAllProducten(int id);
-    public void VoegProductToe(Gebruiker gebruiker, Product product);
+    public List<GebruikerProducten> GetAllProducten(int id);
+    public void VoegProductToe(GebruikerProducten gebruikerProducten);
     public void VerwijderProduct(int id, Product product);
 }

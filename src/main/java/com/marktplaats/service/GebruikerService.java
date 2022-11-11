@@ -8,10 +8,12 @@ import com.marktplaats.repository.GebruikerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class GebruikerService implements IGebruikerService{
     @Autowired
     private GebruikerRepository repo;
@@ -71,15 +73,12 @@ public class GebruikerService implements IGebruikerService{
     }
 
     @Override
-    public List<Product> GetAllProducten(int id) {
-        return this.gebruikerProductenRepo.findGebruikerProductenByGebruiker_Id(id);
+    public List<GebruikerProducten> GetAllProducten(int id) {
+        return this.gebruikerProductenRepo.findAllByGebruiker_Id(id);
     }
 
     @Override
-    public void VoegProductToe(Gebruiker gebruiker, Product product) {
-        GebruikerProducten gebruikerProducten = new GebruikerProducten();
-        gebruikerProducten.setGebruiker(gebruiker);
-        gebruikerProducten.setProduct(product);
+    public void VoegProductToe(GebruikerProducten gebruikerProducten) {
         gebruikerProductenRepo.save(gebruikerProducten);
     }
 

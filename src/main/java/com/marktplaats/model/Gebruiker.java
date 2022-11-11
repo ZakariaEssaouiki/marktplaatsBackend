@@ -3,6 +3,7 @@ package com.marktplaats.model;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
@@ -25,6 +26,9 @@ public class Gebruiker {
     @Column(name = "geslacht")
     @Enumerated(EnumType.STRING)
     private Geslacht geslacht;
+
+    //@OneToMany(targetEntity = Product.class)
+    //private List<Product> producten;
 
     public Gebruiker(String gebruikersnaam, String email, String wachtwoord, String voornaam,String achternaam,
                      LocalDate geboorteDatum, Geslacht geslacht,int id) {
@@ -72,6 +76,8 @@ public class Gebruiker {
     public void setVoornaam(String voornaam) {this.voornaam = voornaam;}
     public String getAchternaam() {return achternaam;}
     public void setAchternaam(String achternaam) {this.achternaam = achternaam;}
+    //public void setProducten(List<Product> producten){this.producten = producten;}
+    //public List<Product> getProducten(){return this.producten;}
     @Override
     public String toString() {
         return this.gebruikersnaam;

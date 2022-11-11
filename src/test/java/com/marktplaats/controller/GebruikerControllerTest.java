@@ -1,9 +1,11 @@
 package com.marktplaats.controller;
 
 import com.marktplaats.model.Gebruiker;
+import com.marktplaats.model.GebruikerProducten;
 import com.marktplaats.model.Geslacht;
 import com.marktplaats.model.Product;
 import com.marktplaats.service.GebruikerService;
+import com.marktplaats.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -35,12 +37,13 @@ class GebruikerControllerTest {
     private MockMvc mvc;
     @MockBean
     private GebruikerService gebruikerService;
+    private ProductService productService;
     private GebruikerController controller;
 
     @BeforeEach
     void setUp(){
         this.gebruikerService = Mockito.mock(GebruikerService.class);
-        this.controller = new GebruikerController(gebruikerService);
+        this.controller = new GebruikerController(gebruikerService, productService);
     }
 
     @Test
@@ -81,12 +84,18 @@ class GebruikerControllerTest {
                 LocalDate.now(), Geslacht.Man,100);
         Product product = new Product("rode fiets",10,"Fiets is nog in goede staat", LocalDate.now(),100);
         Gebruiker gebruikerFalse = null;
+        GebruikerProducten gebruikerProducten = new GebruikerProducten();
+        gebruikerProducten.setGebruiker(gebruiker);
+        gebruikerProducten.setProduct(product);
+        GebruikerProducten gebruikerProductenFalse = new GebruikerProducten();
+        gebruikerProducten.setGebruiker(gebruikerFalse);
+        gebruikerProducten.setProduct(product);
         //when
-        this.controller.VoegProductToe(gebruiker,product);
-        this.controller.VoegProductToe(gebruikerFalse,product);
+        this.controller.VoegProductToe(gebruikerProducten);
+        this.controller.VoegProductToe(gebruikerProductenFalse);
         //then
-        verify(gebruikerService).VoegProductToe(gebruiker,product);
-        verify(gebruikerService,never()).VoegProductToe(gebruikerFalse,product);
+        verify(gebruikerService).VoegProductToe(gebruikerProducten);
+        verify(gebruikerService,never()).VoegProductToe(gebruikerProductenFalse);
     }
 
     @Test
