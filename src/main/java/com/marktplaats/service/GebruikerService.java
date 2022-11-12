@@ -86,4 +86,15 @@ public class GebruikerService implements IGebruikerService{
     public void VerwijderProduct(int id, Product product) {
         this.gebruikerProductenRepo.removeGebruikerProductenByGebruiker_IdAndProduct_Id(id,product.getId());
     }
+
+    @Override
+    public void VerwijderAlleProducten(int id) {
+        this.gebruikerProductenRepo.deleteAllByGebruiker_Id(id);
+    }
+
+    @Override
+    public Gebruiker FindByProductId(int id) {
+        Gebruiker gebruiker = this.gebruikerProductenRepo.findGebruikerProductenByProduct_Id(id).getGebruiker();
+        return gebruiker;
+    }
 }

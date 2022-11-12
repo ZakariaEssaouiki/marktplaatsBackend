@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface GebruikerProductenRepo extends JpaRepository<GebruikerProducten,Integer> {
 
-    //List<GebruikerProducten> findGebruikerProductenByGebruiker_Id(int id);
-
+    GebruikerProducten findGebruikerProductenByProduct_Id(int id);
     List<GebruikerProducten> findAllByGebruiker_Id(int id);
     void removeGebruikerProductenByGebruiker_IdAndProduct_Id(int gebrId, int productId);
+    void deleteAllByGebruiker_Id(int id);
 
 }

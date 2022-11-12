@@ -1,5 +1,6 @@
 package com.marktplaats.controller;
 
+import com.marktplaats.service.GebruikerService;
 import com.marktplaats.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,12 +26,13 @@ class ProductControllerTest {
     private MockMvc mvc;
     @MockBean
     private ProductService productService;
+    private GebruikerService gebruikerService;
     private ProductController controller;
 
     @BeforeEach
     void setUp(){
         this.productService = Mockito.mock(ProductService.class);
-        this.controller = new ProductController(productService);
+        this.controller = new ProductController(productService, gebruikerService);
     }
 
     @Test

@@ -54,9 +54,10 @@ public class GebruikerController {
     public ResponseEntity<Object> VoegProductToe(@RequestBody GebruikerProducten gebruikerProducten){
         if(Objects.nonNull(gebruikerProducten.gebruiker) || Objects.nonNull(gebruikerProducten.product)){
             this.gebruikerService.VoegProductToe(gebruikerProducten);
-            return new ResponseEntity<>(gson.toJson("Product is succesvol toegevoegd."),HttpStatus.CREATED);
+            return new ResponseEntity<>(gson.toJson(gson.toJson("Product is succesvol toegevoegd.")),HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(gson.toJson("Er is een fout ontstaan met het toevoeven van de product."),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(gson.toJson(gson.toJson("Er is een fout ontstaan met het toevoeven van de product."))
+                ,HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/deleteProduct/{id}",method = RequestMethod.DELETE)
@@ -65,8 +66,23 @@ public class GebruikerController {
         if(product != null && !gebruiker.isEmpty()) {
             this.gebruikerService.VerwijderProduct(id, product);
             this.productService.Delete(product);
-            return new ResponseEntity<>(gson.toJson("Product is succesvol verwijderd."), HttpStatus.OK);
+            return new ResponseEntity<>(gson.toJson(gson.toJson("Product is succesvol verwijderd.")), HttpStatus.OK);
         }
-        return new ResponseEntity<>(gson.toJson("Er is iets misgegaan met het verwijderen van het product."),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(gson.toJson(gson.toJson("Er is iets misgegaan met het verwijderen van het product."))
+                ,HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<Object> VerwijderGebruiker(@PathVariable int id){
+        if(!this.gebruikerService.FindById(id).isEmpty()){
+            List<GebruikerProducten> producten = this.gebruikerService.GetAllProducten(id);
+            this.gebruikerService.VerwijderAlleProducten(id);
+            for (var product:producten) {
+                this.productService.Delete(product.getProduct());
+            }
+            this.gebruikerService.Delete(this.gebruikerService.FindById(id).get());
+            return new ResponseEntity<>(gson.toJson("Gebruiker is succesvol verwijderd."),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(gson.toJson("Er is iets misgegaan."),HttpStatus.BAD_REQUEST);
     }
 }

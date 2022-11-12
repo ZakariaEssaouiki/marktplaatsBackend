@@ -19,4 +19,6 @@ public interface IGebruikerService {
     public List<GebruikerProducten> GetAllProducten(int id);
     public void VoegProductToe(GebruikerProducten gebruikerProducten);
     public void VerwijderProduct(int id, Product product);
+    public void VerwijderAlleProducten(int id);
+    public Gebruiker FindByProductId(int id);
 }
