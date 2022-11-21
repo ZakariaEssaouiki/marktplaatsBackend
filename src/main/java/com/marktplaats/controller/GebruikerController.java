@@ -9,16 +9,16 @@ import com.marktplaats.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/gebruiker")
-@CrossOrigin
 public class GebruikerController {
     @Autowired
     private GebruikerService gebruikerService;
@@ -29,13 +29,36 @@ public class GebruikerController {
     final private Gson gson = new Gson();
 
     public GebruikerController(GebruikerService gebruikerService, ProductService productService){
-
         this.gebruikerService = gebruikerService;
         this.productService = productService;
     }
 
-    @RequestMapping(value = "/producten/{id}",method = RequestMethod.GET)
-    public ResponseEntity<Object> GetAllProducten(@PathVariable int id){
+    @PutMapping(value = "/update")
+    public ResponseEntity<Object> UpdateGebruiker(@RequestBody Gebruiker gebruiker,@AuthenticationPrincipal OAuth2User user){
+        String id = user.getAttributes().get("sub").toString();
+        String email = user.getAttributes().get("email").toString();
+        if(this.gebruikerService.FindById(id) != null && AllFieldsAreFilled(gebruiker)){
+            gebruiker.setEmail(email);
+            gebruiker.setId(id);
+            if(this.gebruikerService.GebruikersnaamAlInGebruik(gebruiker.getGebruikersnaam())){
+                return new ResponseEntity<>(gson.toJson("Gebruikersnaam is al in gebruik."),HttpStatus.BAD_REQUEST);
+            }
+            else{
+                this.gebruikerService.Update(gebruiker);
+                return new ResponseEntity<>(gson.toJson("Gebruiker is succesvol geupdatet."),HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(gson.toJson("Er ging iets mis."),HttpStatus.BAD_REQUEST);
+    }
+
+    public boolean AllFieldsAreFilled(Gebruiker gebruiker){
+        return gebruiker.getAchternaam() != null  && gebruiker.getGebruikersnaam() != null &&
+                gebruiker.getGeboorteDatum() != null && gebruiker.getGeslacht() != null && gebruiker.getVoornaam() != null;
+    }
+
+    @GetMapping(value = "/producten")
+    public ResponseEntity<Object> GetAllProducten(@AuthenticationPrincipal OAuth2User user){
+        String id = user.getAttributes().get("sub").toString();
         List<GebruikerProducten> gebruikerProducten = gebruikerService.GetAllProducten(id);
         List<Product>products = new ArrayList<>();
         for (var element:gebruikerProducten) {
@@ -44,13 +67,13 @@ public class GebruikerController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @GetMapping(value = "/getAll")
     public ResponseEntity<Object> GetAll(){
         List<Gebruiker> gebruikers = gebruikerService.GetAll();
         return new ResponseEntity<>(gebruikers,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/voegProductToe", method = RequestMethod.POST)
+    @PostMapping(value = "/voegProductToe")
     public ResponseEntity<Object> VoegProductToe(@RequestBody GebruikerProducten gebruikerProducten){
         if(Objects.nonNull(gebruikerProducten.gebruiker) || Objects.nonNull(gebruikerProducten.product)){
             this.gebruikerService.VoegProductToe(gebruikerProducten);
@@ -60,11 +83,13 @@ public class GebruikerController {
                 ,HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/deleteProduct/{id}",method = RequestMethod.DELETE)
-    public ResponseEntity<Object> VerwijderProduct(@PathVariable int id, @RequestBody Product product){
-        Optional<Gebruiker> gebruiker = gebruikerService.FindById(id);
-        if(product != null && !gebruiker.isEmpty()) {
-            this.gebruikerService.VerwijderProduct(id, product);
+    @DeleteMapping(value = "/deleteProduct/{id}")
+    public ResponseEntity<Object> VerwijderProduct(@PathVariable int id, @AuthenticationPrincipal OAuth2User user){
+        String userId = user.getAttributes().get("sub").toString();
+        Gebruiker gebruiker = gebruikerService.FindById(userId);
+        Product product = this.productService.FindById(id);
+        if(product != null && gebruiker != null) {
+            this.gebruikerService.VerwijderProduct(userId, product);
             this.productService.Delete(product);
             return new ResponseEntity<>(gson.toJson(gson.toJson("Product is succesvol verwijderd.")), HttpStatus.OK);
         }
@@ -73,14 +98,15 @@ public class GebruikerController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Object> VerwijderGebruiker(@PathVariable int id){
-        if(!this.gebruikerService.FindById(id).isEmpty()){
+    public ResponseEntity<Object> VerwijderGebruiker(@PathVariable String id,@AuthenticationPrincipal OAuth2User user){
+        String userId = user.getAttributes().get("sub").toString();
+        if(this.gebruikerService.FindById(id) != null && this.gebruikerService.FindById(userId) != null){
             List<GebruikerProducten> producten = this.gebruikerService.GetAllProducten(id);
             this.gebruikerService.VerwijderAlleProducten(id);
             for (var product:producten) {
                 this.productService.Delete(product.getProduct());
             }
-            this.gebruikerService.Delete(this.gebruikerService.FindById(id).get());
+            this.gebruikerService.Delete(this.gebruikerService.FindById(id));
             return new ResponseEntity<>(gson.toJson("Gebruiker is succesvol verwijderd."),HttpStatus.OK);
         }
         return new ResponseEntity<>(gson.toJson("Er is iets misgegaan."),HttpStatus.BAD_REQUEST);

@@ -11,5 +11,5 @@ public interface IProductService {
     public void Delete(Product product);
     public void Update(Product product);
     public Collection<Product> GetAll();
-    public Optional<Product> FindById(int id);
+    public Product FindById(int id);
 }

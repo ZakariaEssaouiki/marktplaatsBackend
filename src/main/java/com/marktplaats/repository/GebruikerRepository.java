@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GebruikerRepository extends JpaRepository<Gebruiker, Integer> {
+public interface GebruikerRepository extends JpaRepository<Gebruiker, String> {
     boolean findGebruikerByEmail(String email);
-    boolean findGebruikerByGebruikersnaam(String gebruikersnaam);
-    Optional<Gebruiker> findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(String gebruikersnaam, String wachtwoord, String email, String wachtwoord2);
+    Gebruiker findGebruikerById(String id);
+    Gebruiker findGebruikerByGebruikersnaam(String gebruikersnaam);
 
+    boolean existsGebruikerByGebruikersnaam(String gebruikersnaam);
 }

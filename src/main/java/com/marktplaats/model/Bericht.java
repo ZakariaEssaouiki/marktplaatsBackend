@@ -1,7 +1,17 @@
 package com.marktplaats.model;
 
-import javax.persistence.Entity;
+import lombok.*;
 
-//@Entity
+/*@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class Bericht {
-}
+
+    private String senderName;
+    private String receiverName;
+    private String message;
+    private String date;
+    private Status status;
+}*/

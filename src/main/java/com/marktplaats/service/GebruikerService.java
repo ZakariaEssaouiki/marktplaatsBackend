@@ -26,8 +26,8 @@ public class GebruikerService implements IGebruikerService{
         this.gebruikerProductenRepo = gebruikerProductenRepo;
     }
     @Override
-    public Optional<Gebruiker> FindById(int id) {
-        Optional<Gebruiker> gebruiker = repo.findById(id);
+    public Gebruiker FindById(String id) {
+        Gebruiker gebruiker = repo.findGebruikerById(id);
         return gebruiker;
     }
 
@@ -42,9 +42,22 @@ public class GebruikerService implements IGebruikerService{
     }
 
     @Override
+    public void Update(Gebruiker gebruiker){
+        Gebruiker user = this.repo.findGebruikerById(gebruiker.getId());
+        user.setEmail(gebruiker.getEmail());
+        user.setId(gebruiker.getId());
+        user.setGebruikersnaam(gebruiker.getGebruikersnaam());
+        user.setVoornaam(gebruiker.getVoornaam());
+        user.setAchternaam(gebruiker.getAchternaam());
+        user.setGeslacht(gebruiker.getGeslacht());
+        user.setGeboorteDatum(gebruiker.getGeboorteDatum());
+        this.repo.save(user);
+    }
+
+    @Override
     public boolean GebruikersnaamAlInGebruik(String gebruikersnaam) {
         if(!gebruikersnaam.isEmpty() && !gebruikersnaam.isBlank()){
-            if(!repo.findGebruikerByGebruikersnaam(gebruikersnaam)){
+            if(repo.existsGebruikerByGebruikersnaam(gebruikersnaam)){
                 return true;
             }
         }
@@ -67,13 +80,7 @@ public class GebruikerService implements IGebruikerService{
     }
 
     @Override
-    public Optional<Gebruiker> Login(String gebrOfEmail, String wachtwoord) {
-        Optional<Gebruiker> gebruiker = repo.findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(gebrOfEmail, wachtwoord,gebrOfEmail,wachtwoord);
-        return gebruiker;
-    }
-
-    @Override
-    public List<GebruikerProducten> GetAllProducten(int id) {
+    public List<GebruikerProducten> GetAllProducten(String id) {
         return this.gebruikerProductenRepo.findAllByGebruiker_Id(id);
     }
 
@@ -83,12 +90,12 @@ public class GebruikerService implements IGebruikerService{
     }
 
     @Override
-    public void VerwijderProduct(int id, Product product) {
+    public void VerwijderProduct(String id, Product product) {
         this.gebruikerProductenRepo.removeGebruikerProductenByGebruiker_IdAndProduct_Id(id,product.getId());
     }
 
     @Override
-    public void VerwijderAlleProducten(int id) {
+    public void VerwijderAlleProducten(String id) {
         this.gebruikerProductenRepo.deleteAllByGebruiker_Id(id);
     }
 

@@ -40,8 +40,8 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public Optional<Product> FindById(int id) {
-        Optional<Product> product = this.repo.findById(id);
+    public Product FindById(int id) {
+        Product product = this.repo.findById(id).orElse(null);
         return product;
     }
 }

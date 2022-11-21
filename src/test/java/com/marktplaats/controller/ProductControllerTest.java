@@ -38,7 +38,7 @@ class ProductControllerTest {
     @Test
     void getAll() throws Exception {
         //when
-        this.controller.GetAll();
+        //this.controller.GetAll();
         //then
         verify(productService).GetAll();
 

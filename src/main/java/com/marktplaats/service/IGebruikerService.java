@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public interface IGebruikerService {
 
-    public Optional<Gebruiker> FindById(int id);
+    public Gebruiker FindById(String id);
     public void Create(Gebruiker gebruiker);
     public void Delete(Gebruiker gebruiker);
+    public void Update(Gebruiker gebruiker);
     public boolean GebruikersnaamAlInGebruik(String gebruikersnaam);
     public boolean EmailAlInGebruik(String email);
     public List<Gebruiker> GetAll();
-    public Optional<Gebruiker> Login(String gebrOfEmail, String wachtwoord);
-    public List<GebruikerProducten> GetAllProducten(int id);
+    public List<GebruikerProducten> GetAllProducten(String id);
     public void VoegProductToe(GebruikerProducten gebruikerProducten);
-    public void VerwijderProduct(int id, Product product);
-    public void VerwijderAlleProducten(int id);
+    public void VerwijderProduct(String id, Product product);
+    public void VerwijderAlleProducten(String id);
     public Gebruiker FindByProductId(int id);
 }

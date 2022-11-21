@@ -13,21 +13,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(GebruikerService.class)
@@ -49,11 +40,11 @@ class GebruikerControllerTest {
     @Test
     void getAllProducten() throws Exception {
         //given
-        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
-                LocalDate.now(), Geslacht.Man,100);
+        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","jan","janssen",
+                LocalDate.now(), Geslacht.Man,"100");
         //when
         //this.gebruikerService.Create(gebruiker);
-        this.controller.GetAllProducten(gebruiker.getId());
+        this.controller.GetAllProducten(null);
         //then
         verify(gebruikerService).GetAllProducten(gebruiker.getId());
         /*mvc.perform(MockMvcRequestBuilders.get("/producten/{id}",1)
@@ -80,8 +71,8 @@ class GebruikerControllerTest {
     @Test
     void voegProductToe() {
         //given
-        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
-                LocalDate.now(), Geslacht.Man,100);
+        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","jan","janssen",
+                LocalDate.now(), Geslacht.Man,"100");
         Product product = new Product("rode fiets",10,"Fiets is nog in goede staat", LocalDate.now(),100);
         Gebruiker gebruikerFalse = null;
         GebruikerProducten gebruikerProducten = new GebruikerProducten();
@@ -101,12 +92,12 @@ class GebruikerControllerTest {
     @Test
     void verwijderProduct() {
         //given
-        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
-                LocalDate.now(), Geslacht.Man,100);
+        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","jan","janssen",
+                LocalDate.now(), Geslacht.Man,"100");
         Product product = new Product("rode fiets",10,"Fiets is nog in goede staat", LocalDate.now(),100);
         //when
-        this.controller.VerwijderProduct(gebruiker.getId(),product);
-        this.controller.VerwijderProduct(gebruiker.getId(),null);
+        this.controller.VerwijderProduct(product.getId(),null);
+        this.controller.VerwijderProduct(product.getId(),null);
         //then
         verify(gebruikerService).VerwijderProduct(gebruiker.getId(),product);
         verify(gebruikerService,never()).VerwijderProduct(gebruiker.getId(),null);

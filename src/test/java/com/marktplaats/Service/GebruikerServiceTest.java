@@ -40,10 +40,10 @@ class GebruikerServiceTest {
     @Test
     void findById() {
         //when
-        gebruikerService.FindById(100);
+        gebruikerService.FindById("100");
         //then
-        verify(repo).findById(100);
-        verify(repo, Mockito.never()).deleteById(100);
+        verify(repo).findGebruikerById("100");
+        verify(repo, Mockito.never()).deleteById("100");
     }
 
     @Test
@@ -57,8 +57,8 @@ class GebruikerServiceTest {
     @Test
     void create() {
         //when
-        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
-                LocalDate.now(), Geslacht.Man,100);
+        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","jan","janssen",
+                LocalDate.now(), Geslacht.Man,"100");
         gebruikerService.Create(gebruiker);
         //then
         //gebruiker die wordt aangemaakt en opgeslagen wordt onderschept.
@@ -73,8 +73,8 @@ class GebruikerServiceTest {
     @Test
     void delete() {
         //when
-        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
-                LocalDate.now(), Geslacht.Man,100);
+        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","jan","janssen",
+                LocalDate.now(), Geslacht.Man,"100");
         gebruikerService.Delete(gebruiker);
         //then
         verify(repo).delete(gebruiker);
@@ -113,28 +113,19 @@ class GebruikerServiceTest {
     }
 
     @Test
-    void login() {
-        //when
-        gebruikerService.Login("ludo101","Welkom101");
-        //then
-        verify(repo).findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord("ludo101","Welkom101","ludo101","Welkom101");
-        verify(repo,never()).findGebruikerByGebruikersnaamAndWachtwoordOrEmailAndWachtwoord(" "," ","","");
-    }
-
-    @Test
     void getAllProducten() {
         //when
-        gebruikerService.GetAllProducten(10);
+        gebruikerService.GetAllProducten("10");
         //then
-        verify(gebruikerProductenRepo).findAllByGebruiker_Id(10);
+        verify(gebruikerProductenRepo).findAllByGebruiker_Id("10");
     }
 
     @Test
     void voegProductToe() {
         //when
         Product product = new Product("rode fiets",10,"Fiets is nog in goede staat", LocalDate.now(),100);
-        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
-                LocalDate.now(), Geslacht.Man,100);
+        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","jan","janssen",
+                LocalDate.now(), Geslacht.Man,"100");
         GebruikerProducten gebruikerProducten = new GebruikerProducten();
         gebruikerProducten.setProduct(product);
         gebruikerProducten.setGebruiker(gebruiker);
@@ -152,8 +143,8 @@ class GebruikerServiceTest {
     void verwijderProduct() {
         //when
         Product product = new Product("rode fiets",10,"Fiets is nog in goede staat", LocalDate.now(),100);
-        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","Jan123","jan","janssen",
-                LocalDate.now(), Geslacht.Man,100);
+        Gebruiker gebruiker = new Gebruiker("jan01","jan@example.com","jan","janssen",
+                LocalDate.now(), Geslacht.Man,"100");
         gebruikerService.VerwijderProduct(gebruiker.getId(),product);
         //then
         verify(gebruikerProductenRepo).removeGebruikerProductenByGebruiker_IdAndProduct_Id(gebruiker.getId(),product.getId());
