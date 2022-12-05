@@ -21,4 +21,5 @@ public interface IGebruikerService {
     public void VerwijderProduct(String id, Product product);
     public void VerwijderAlleProducten(String id);
     public Gebruiker FindByProductId(int id);
+    public Gebruiker FindByGebruikersnaam(String gebruikersnaam);
 }

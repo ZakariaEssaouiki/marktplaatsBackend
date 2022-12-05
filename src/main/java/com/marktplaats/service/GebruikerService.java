@@ -104,4 +104,9 @@ public class GebruikerService implements IGebruikerService{
         Gebruiker gebruiker = this.gebruikerProductenRepo.findGebruikerProductenByProduct_Id(id).getGebruiker();
         return gebruiker;
     }
+
+    @Override
+    public Gebruiker FindByGebruikersnaam(String gebruikersnaam) {
+        return this.repo.findGebruikerByGebruikersnaam(gebruikersnaam);
+    }
 }

@@ -1,7 +1,6 @@
 package com.marktplaats.config;
 
 import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    /**Methode die filtert welke filetypes worden toegestaan en voor welke request bepaalde functies zijn toegestaan. */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

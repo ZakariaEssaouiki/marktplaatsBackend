@@ -29,6 +29,8 @@ public class LoginController {
         this.gebruikerService = gebruikerService;
     }
 
+    /**Methode die controleert of de gebruiker geauthentificeerd is. In het geval dat het wel het geval is wordt de gebruiker teruggegeven.
+     *  Zoniet dat wordt er een lege body geretourneerd.*/
     @GetMapping("/getUser")
     public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
@@ -46,6 +48,7 @@ public class LoginController {
         }
     }
 
+    /**Methode die regelt dat de gebruiker wordt uitgelogt en zijn sessie wordt beeindigd.*/
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {

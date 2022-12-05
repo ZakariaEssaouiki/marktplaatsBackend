@@ -27,11 +27,13 @@ public class ProductController {
         this.gebruikerService = gebruikerService;
     }
 
+    /**Methode die alle producten ophaalt.*/
     @GetMapping(value = "/getAll")
     public ResponseEntity<Object> GetAll() {
         return new ResponseEntity<>(productService.GetAll(), HttpStatus.OK);
     }
 
+    /**Methode die een product aanmaakt.*/
     @PostMapping(value = "/add")
     public ResponseEntity<Object> VoegProductToe(@RequestBody Product product,@AuthenticationPrincipal OAuth2User principal){
         String id = principal.getAttributes().get("sub").toString();
@@ -47,6 +49,7 @@ public class ProductController {
         return new ResponseEntity<>(gson.toJson("Product kon niet worden toegevoegd"),HttpStatus.BAD_REQUEST);
     }
 
+    /**Methode die een een gebruiker teruggeeft op basis van de meegegegevn product id.*/
     @GetMapping(value = "/findUserByProduct/{id}")
     public ResponseEntity<Object> FindGebruikerVanProduct(@PathVariable int id){
         if(this.productService.FindById(id) != null){
