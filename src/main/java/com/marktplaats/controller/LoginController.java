@@ -38,10 +38,12 @@ public class LoginController {
         } else {
             String id = user.getAttributes().get("sub").toString();
             String email = user.getAttributes().get("email").toString();
+            String gebruikersnaam = user.getAttributes().get("name").toString();
             if(gebruikerService.FindById(id) == null){
                 Gebruiker gebruiker = new Gebruiker();
                 gebruiker.setId(id);
                 gebruiker.setEmail(email);
+                gebruiker.setGebruikersnaam(gebruikersnaam);
                 this.gebruikerService.Create(gebruiker);
             }
             return ResponseEntity.ok().body(user.getAttributes());

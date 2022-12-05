@@ -38,25 +38,21 @@ public class GebruikerController {
     public ResponseEntity<Object> UpdateGebruiker(@RequestBody Gebruiker gebruiker,@AuthenticationPrincipal OAuth2User user){
         String id = user.getAttributes().get("sub").toString();
         String email = user.getAttributes().get("email").toString();
+        String gebruikersnaam = user.getAttributes().get("name").toString();
         if(this.gebruikerService.FindById(id) != null && AllFieldsAreFilled(gebruiker)){
             gebruiker.setEmail(email);
             gebruiker.setId(id);
-            boolean same = gebruiker.getId() == this.gebruikerService.FindByGebruikersnaam(gebruiker.getGebruikersnaam()).getId();
-            if(this.gebruikerService.GebruikersnaamAlInGebruik(gebruiker.getGebruikersnaam()) && !same){
-                return new ResponseEntity<>(gson.toJson("Gebruikersnaam is al in gebruik."),HttpStatus.BAD_REQUEST);
-            }
-            else{
-                this.gebruikerService.Update(gebruiker);
-                return new ResponseEntity<>(gson.toJson("Gebruiker is succesvol geupdatet."),HttpStatus.OK);
-            }
+            gebruiker.setGebruikersnaam(gebruikersnaam);
+            this.gebruikerService.Update(gebruiker);
+            return new ResponseEntity<>(gson.toJson("Gebruiker is succesvol geupdatet."),HttpStatus.OK);
         }
         return new ResponseEntity<>(gson.toJson("Er ging iets mis."),HttpStatus.BAD_REQUEST);
     }
 
     /**controleert of alle attributen van Gebruiker zijn ingevoerd.*/
     public boolean AllFieldsAreFilled(Gebruiker gebruiker){
-        return gebruiker.getAchternaam() != null  && gebruiker.getGebruikersnaam() != null &&
-                gebruiker.getGeboorteDatum() != null && gebruiker.getGeslacht() != null && gebruiker.getVoornaam() != null;
+        return gebruiker.getAchternaam() != null && gebruiker.getGeboorteDatum() != null
+                && gebruiker.getGeslacht() != null && gebruiker.getVoornaam() != null;
     }
 
     /**Methode die alle producten ophaalt van de meegegeven gebruiker.*/
@@ -109,7 +105,7 @@ public class GebruikerController {
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Object> VerwijderGebruiker(@PathVariable String id,@AuthenticationPrincipal OAuth2User user){
         String userId = user.getAttributes().get("sub").toString();
-        if(id == userId){
+        if(id.equals(userId)){
             if(this.gebruikerService.FindById(id) != null && this.gebruikerService.FindById(userId) != null){
                 List<GebruikerProducten> producten = this.gebruikerService.GetAllProducten(id);
                 this.gebruikerService.VerwijderAlleProducten(id);

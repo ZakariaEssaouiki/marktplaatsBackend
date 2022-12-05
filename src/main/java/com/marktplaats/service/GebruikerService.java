@@ -107,6 +107,6 @@ public class GebruikerService implements IGebruikerService{
 
     @Override
     public Gebruiker FindByGebruikersnaam(String gebruikersnaam) {
-        return this.repo.findGebruikerByGebruikersnaam(gebruikersnaam);
+        return this.repo.findGebruikerByGebruikersnaam(gebruikersnaam).orElse(null);
     }
 }
