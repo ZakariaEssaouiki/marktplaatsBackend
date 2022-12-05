@@ -56,9 +56,8 @@ public class GebruikerController {
     }
 
     /**Methode die alle producten ophaalt van de meegegeven gebruiker.*/
-    @GetMapping(value = "/producten")
-    public ResponseEntity<Object> GetAllProducten(@AuthenticationPrincipal OAuth2User user){
-        String id = user.getAttributes().get("sub").toString();
+    @GetMapping(value = "/producten/{id}")
+    public ResponseEntity<Object> GetAllProducten(@PathVariable String id){
         List<GebruikerProducten> gebruikerProducten = gebruikerService.GetAllProducten(id);
         List<Product>products = new ArrayList<>();
         for (var element:gebruikerProducten) {
@@ -72,6 +71,17 @@ public class GebruikerController {
     public ResponseEntity<Object> GetAll(){
         List<Gebruiker> gebruikers = gebruikerService.GetAll();
         return new ResponseEntity<>(gebruikers,HttpStatus.OK);
+    }
+
+    /**Methode die de gebruiker teruggeeft op basis van de meegegeven OAuth gegevens.*/
+    @GetMapping(value = "/getUser")
+    public ResponseEntity<Object> GetUserById(@AuthenticationPrincipal OAuth2User user){
+        if(user != null){
+            String id = user.getAttributes().get("sub").toString();
+            Gebruiker gebruiker = this.gebruikerService.FindById(id);
+            return new ResponseEntity<>(gebruiker,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(gson.toJson("Er ging iets mis."),HttpStatus.BAD_REQUEST);
     }
 
     /**Methode die een product aanmaakt en koppelt aan de gebruiker die de product aanmaakt.*/
